@@ -11,6 +11,6 @@ public interface User_DAO {
 	public UserDetails login(UserDetails userData);
 
 	/* Check wheather the user is registered or not wali method */
-	public Boolean checkUser(UserDetails userData);
+	public UserDetails checkUser(UserDetails userData);
 
 }

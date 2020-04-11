@@ -1,13 +1,13 @@
 package com.bean.Controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
 
-	@RequestMapping("/go")
-	public String newPage() {
-		return "/demo";
+	@GetMapping("/home")
+	public String homePage() {
+		return "/index";
 	}
 }

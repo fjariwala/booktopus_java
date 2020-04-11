@@ -61,19 +61,41 @@ public class LoginANDRegister_Controller {
 			// System.out.println(user.toString());
 
 			/* 1) we will check wheather the user is registered or not */
-			Boolean res = userDao.checkUser(user);
+			UserDetails userResult = userDao.checkUser(user);
 
-			if (res == true) {
-				model.addAttribute("error",
-						"The user already exists with current email id, try again with another email.");
+			if (userResult != null) {
+
+				model.addAttribute("error", "The user already exists with current email.");
 				return "/auth/register";
+
 			} else {
 
 				String result = userDao.registerUser(user);
+				return "redirect:/home";
 			}
-
-			return "demo";
 		}
+	}
 
+	/* GET mapping for login page */
+	@GetMapping("/login")
+	public String showLogin(Model model) {
+
+		model.addAttribute("user", new UserDetails());
+
+		return "/auth/login";
+	}
+
+	/* POST mapping for login page */
+	@PostMapping("/login")
+	public String loginUser(@ModelAttribute("user") UserDetails user, Model model) {
+
+		UserDetails userData = userDao.login(user);
+
+		if (userData == null) {
+			model.addAttribute("error", "Invalid credentials");
+			return "/auth/login";
+		} else {
+			return "redirect:/home";
+		}
 	}
 }

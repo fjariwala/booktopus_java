@@ -39,7 +39,10 @@ public class UserDetails {
 	private String email;
 
 	@NotNull(message = "is required")
-	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,8}$", message = "Your password must has one uppercase, lowercase, digit, a special character and it must be 8 characters long")
+	// @Pattern(regexp =
+	// "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,8}$", message
+	// = "Your password must has one uppercase, lowercase, digit, a special
+	// character and it must be 8 characters long")
 	@Column(name = "password")
 	private String password;
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bean.Entity.UserDetails;
+import com.bean.Hashing.Password;
 
 /*
  * This annotation automatically registers our DAO class into the dispatcher-servlet.xml file
@@ -36,42 +37,80 @@ public class User_DAO_Impl implements User_DAO {
 		Session session = sessionFactory.getCurrentSession();
 
 		try {
+			/*
+			 * Encoding the password
+			 */
+			Password pw = new Password();
 
-			session.saveOrUpdate(userData);
+			String password = pw.getSaltedHash(userData.getPassword());
+			userData.setPassword(password);
+
+			/* Save or Update */
+			session.save(userData);
 
 			return "You are registerd with email id :" + userData.getEmail() + "";
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e);
+			System.out.println(e.getMessage());
 			return "Error :" + e;
 		}
-
-	}
-
-	public UserDetails login(UserDetails userData) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Transactional
-	public Boolean checkUser(UserDetails userData) {
+	public UserDetails login(UserDetails userData) {
 		// TODO Auto-generated method stub
+
+		Session session = sessionFactory.getCurrentSession();
+		Query<UserDetails> query = null;
+
+		try {
+
+			String q = "from UserDetails s where s.email='" + userData.getEmail() + "' ";
+			query = session.createQuery(q, UserDetails.class);
+			/*
+			 * The new method called uniqueResult() , returns either a user if
+			 * available.......... or null when not available
+			 */
+			UserDetails user = query.uniqueResult();
+
+			/*
+			 * Decoding the password
+			 */
+			Password pw = new Password();
+			/*
+			 * If the password match then it will return true otherwise false
+			 */
+			Boolean passwordMatch = pw.check(userData.getPassword(), user.getPassword());
+
+			if (passwordMatch == true) {
+				return user;
+			} else {
+				return null;
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+
+	@Transactional
+	public UserDetails checkUser(UserDetails userData) {
+		// TODO Auto-generated method stub
+
+		Query<UserDetails> query = null;
 
 		Session session = sessionFactory.getCurrentSession();
 
 		String q = "from UserDetails s where s.email='" + userData.getEmail() + "' ";
-		Query<UserDetails> query = session.createQuery(q, UserDetails.class);
-
+		query = session.createQuery(q, UserDetails.class);
 		/*
 		 * query null means no user !! true == exists && false == doesn't exists
 		 */
-		if (query.getResultList() == null) {
-			return false;
-		} else {
-			return true;
-		}
+		UserDetails user = query.uniqueResult();
 
+		return user;
 	}
 
 }

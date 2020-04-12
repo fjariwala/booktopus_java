@@ -49,20 +49,4 @@ public class Password {
 		return Base64.encodeBase64String(key.getEncoded());
 	}
 
-	public static void main(String[] args) throws Exception {
-
-		String password = "Rram@786";
-		// System.out.println("Hashed password is : " + getSaltedHash(password));
-
-		Password pw = new Password();
-		// String stored = getSaltedHash(password);
-//		System.out.println(stored);
-
-		// this comes from database
-		String stored = "KcSoDCOS/dAoqI7W+T/gLGfFq3iM2k5rh7p/2lKio/I=$pa3I6O9hlfjgaM5sTdGOQOgYUKTQpOPBwZfMvvIgoWs=";
-
-		System.out.println("Checking the passwords match or not :" + pw.check(password, stored));
-
-	}
-
 }

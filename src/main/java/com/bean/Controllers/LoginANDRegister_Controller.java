@@ -1,5 +1,7 @@
 package com.bean.Controllers;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +89,7 @@ public class LoginANDRegister_Controller {
 
 	/* POST mapping for login page */
 	@PostMapping("/login")
-	public String loginUser(@ModelAttribute("user") UserDetails user, Model model) {
+	public String loginUser(@ModelAttribute("user") UserDetails user, Model model, HttpServletRequest req) {
 
 		UserDetails userData = userDao.login(user);
 
@@ -95,7 +97,26 @@ public class LoginANDRegister_Controller {
 			model.addAttribute("error", "Invalid credentials");
 			return "/auth/login";
 		} else {
+			// model.addAttribute("user", userData);
+
+			/*
+			 * Setting the session
+			 */
+			HttpSession session = req.getSession();
+			session.setAttribute("name", userData.getFirstName());
+			session.setAttribute("id", userData.getId());
+
 			return "redirect:/home";
 		}
+	}
+
+	/* GET mapping for login page */
+	@GetMapping("/logout")
+	public String logout(Model model, HttpServletRequest req) {
+
+		HttpSession session = req.getSession();
+		session.invalidate();
+
+		return "redirect:/home";
 	}
 }

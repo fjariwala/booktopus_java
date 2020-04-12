@@ -27,7 +27,7 @@ public class UserDetails {
 	private String firstName;
 
 	@NotNull(message = "is required ")
-	@Size(min = 2, message = "Your first name must be two characters long")
+	@Size(min = 2, message = "Your last name must be two characters long")
 	@Pattern(regexp = "^[A-Za-z]+$", message = "Please enter valid last name")
 	@Column(name = "last_name")
 	private String lastName;

@@ -20,10 +20,16 @@ public class BookDetails {
 	private int id;
 
 	@NotNull(message = "is required ")
-	@Size(min = 5, message = "Your book name must be 5 characters long")
-	@Pattern(regexp = "^[A-Za-z]+$", message = "Please enter valid book name")
+	@Size(min = 3, message = "Your book name must be 3 characters long")
+	@Pattern(regexp = "^[a-zA-Z ]*$", message = "Please enter valid book name")
 	@Column(name = "book_name")
 	private String bookName;
+
+	@NotNull(message = "is required ")
+	@Size(min = 3, message = "Your book author name must be 3 characters long")
+	@Pattern(regexp = "^[a-zA-Z ]*$", message = "Please enter valid book author name")
+	@Column(name = "book_author")
+	private String bookAuthor;
 
 	@NotNull(message = "is required ")
 	@Pattern(regexp = "^[0-9]*$", message = "Subject code must be in digits only")
@@ -31,54 +37,82 @@ public class BookDetails {
 	private String subjectCode;
 
 	@NotNull(message = "is required ")
-	@Pattern(regexp = "^[A-Za-z]+$", message = "Please enter valid branch name")
 	@Column(name = "branch_name")
 	private String branch;
 
 	@NotNull(message = "is required ")
-	@Pattern(regexp = "^[0-9]*$", message = "Semester must be in digits only")
 	@Column(name = "semester")
 	private String semester;
 
 	@NotNull(message = "is required ")
-	@Pattern(regexp = "^[0-9]*$", message = "Book edition must be in digits only")
 	@Column(name = "book_edition")
 	private String bookEdition;
 
 	@NotNull(message = "is required")
-	@Pattern(regexp = "^[0-9]*$", message = "Book uploader id must be in digits only")
 	@Column(name = "uploader_id")
 	private int uploaderId;
 
+//	@NotNull(message = "is required")
+//	@Column(name = "book_data")
+//	private byte[] data;
+
+	private String imageName;
+
 	@NotNull(message = "is required")
-	@Column(name = "book_data")
-	private byte[] data;
+	@Column(name = "book_availability")
+	private int availability = 1;
 
 	public BookDetails() {
 
 	}
 
-	public BookDetails(String bookName, String subjectCode, String branch, String semester, String bookEdition,
-			int uploaderId) {
-
+	public BookDetails(String bookName, String bookAuthor, String subjectCode, String branch, String semester,
+			String bookEdition, int uploaderId, String imageName, int availability) {
 		this.bookName = bookName;
+		this.bookAuthor = bookAuthor;
 		this.subjectCode = subjectCode;
 		this.branch = branch;
 		this.semester = semester;
 		this.bookEdition = bookEdition;
 		this.uploaderId = uploaderId;
+		this.imageName = imageName;
+		this.availability = availability;
 	}
 
-	public byte[] getData() {
-		return data;
+	public String getBookAuthor() {
+		return bookAuthor;
 	}
 
-	public void setData(byte[] data) {
-		this.data = data;
+	public void setBookAuthor(String bookAuthor) {
+		this.bookAuthor = bookAuthor;
 	}
+
+	public int getAvailability() {
+		return availability;
+	}
+
+	public void setAvailability(int availability) {
+		this.availability = availability;
+	}
+
+//	public byte[] getData() {
+//		return data;
+//	}
+//
+//	public void setData(byte[] data) {
+//		this.data = data;
+//	}
 
 	public int getId() {
 		return id;
+	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
 	}
 
 	public void setId(int id) {
@@ -131,6 +165,13 @@ public class BookDetails {
 
 	public void setUploaderId(int uploaderId) {
 		this.uploaderId = uploaderId;
+	}
+
+	@Override
+	public String toString() {
+		return "BookDetails [id=" + id + ", bookName=" + bookName + ", bookAuthor=" + bookAuthor + ", subjectCode="
+				+ subjectCode + ", branch=" + branch + ", semester=" + semester + ", bookEdition=" + bookEdition
+				+ ", uploaderId=" + uploaderId + ", imageName=" + imageName + ", availability=" + availability + "]";
 	}
 
 }

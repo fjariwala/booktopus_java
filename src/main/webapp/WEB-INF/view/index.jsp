@@ -28,6 +28,7 @@
 
 </head>
 <body>
+
 	<!-- Navbar starts -->
 	<div class="container">
 		<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
@@ -79,58 +80,38 @@
 </div>
 	<!-- Navbar Ends -->
 
+	<c:if test="${not empty message}">
+		<div class="alert alert-success" role="alert">${message}</div>
+	</c:if>
+
 	<!-- Book container starts -->
 	<br />
 	<br />
 	<div class="container ">
 		<!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-		<div class="row">
 
-			<div class="col-xs-6 col-md-4 "><br />
-				<div class="card" style="width: 18rem;"><img
-					src="resources/images/ada.jpg" height="350px" class="card-img-top"
-					alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Card title</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p> <a
-						href="#" class="btn btn-primary">Go somewhere</a>
-				</div></div></div>
 
-			<div class="col-xs-6 col-md-4"><br />
-				<div class="card" style="width: 18rem;"><img
-					src="resources/images/se.jpg" height="350px" class="card-img-top"
-					alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Card title</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p> <a
-						href="#" class="btn btn-primary">Go somewhere</a>
-				</div></div></div>
 
-			<div class="col-xs-6 col-md-4"><br />
-				<div class="card" style="width: 18rem;"><img
-					src="resources/images/maths.jpg" height="350px"
-					class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Card title</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p> <a
-						href="#" class="btn btn-primary">Go somewhere</a>
-				</div></div></div>
+		<div class="row"><c:forEach var="book" items="${books }">
 
-			<div class="col-xs-6 col-md-4"><br />
-				<div class="card" style="width: 18rem;"><img
-					src="resources/images/maths.jpg" height="350px"
-					class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Card title</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p> <a
-						href="#" class="btn btn-primary">Go somewhere</a>
-				</div></div></div>
+				<!-- This link is used for update the data -->
+				<c:url var="getBookLink" value="/book/getBookData">
+					<c:param name="bookId" value="${book.id }" />
+				</c:url>
 
-	</div>
+				<div class="col-xs-6 col-md-3 "><br />
+					<div class="card" style="width: 16rem;"><img
+						src="resources/uploads/${book.imageName }" height="319px"
+						class="card-img-top" alt="...">
+						<div class="card-body">
+							<h5 class="card-title">${book.bookName }</h5>
+							<p class="card-text">${book.subjectCode }</p> <a
+							href="${getBookLink }" class="btn btn-primary">More
+								Information</a>
+					</div></div></div>
+
+			</c:forEach></div>
+
 </div>
 
 	<!-- Book container ends -->

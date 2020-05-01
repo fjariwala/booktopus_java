@@ -105,7 +105,7 @@ public class LoginANDRegister_Controller {
 			HttpSession session = req.getSession();
 			session.setAttribute("name", userData.getFirstName());
 			session.setAttribute("id", userData.getId());
-
+			session.setMaxInactiveInterval(3600);
 			return "redirect:/home";
 		}
 	}

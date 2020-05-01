@@ -1,21 +1,35 @@
 package com.bean.Controllers;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.bean.DAO.Book_DAO;
 import com.bean.Entity.BookDetails;
 
 @Controller
 @RequestMapping("/book")
 public class Book_Controller {
+
+	/*
+	 * Here we need to create Book_DAO's object..... And we will auto wire it ..
+	 */
+	@Autowired
+	private Book_DAO bookDao;
 
 	/*
 	 * We use @InitBinder annotation to remove front and back white spaces. How it
@@ -45,6 +59,62 @@ public class Book_Controller {
 		}
 
 		return "/books/bookForm";
+	}
+
+	@PostMapping("/uploadBook")
+	public String testUpload(@RequestParam("fileUpload") MultipartFile file,
+			@ModelAttribute("book") BookDetails bookData) {
+
+		String returnValue = null;
+//		if (theBindedResults.hasErrors()) {
+//
+//			System.out.println(theBindedResults.getFieldErrorCount());
+//			returnValue = "/books/bookForm";
+//
+//		} else {
+
+		try {
+			String result = bookDao.saveBook(bookData, file);
+			if (result != null) {
+				returnValue = "redirect:/home";
+
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			returnValue = "redirect:/book/uploadBook";
+		}
+		// }
+		return returnValue;
+
+	}
+
+	@GetMapping("/getBookData")
+	public String getBook(@RequestParam("bookId") int bookId, Model model, HttpServletRequest req) {
+
+		HttpSession session = req.getSession(false);
+		if (session != null) {
+
+			String userName = (String) session.getAttribute("name");
+
+			model.addAttribute("user", userName);
+
+			BookDetails bookData = bookDao.getIndividualBook(bookId);
+			System.out.println(bookData);
+
+			model.addAttribute("book", bookData);
+
+			return "/books/bookPage";
+
+		} else {
+
+			// session.invalidate();
+			// model.addAttribute("user", "");
+			System.out.println("Session Ended");
+			return null;
+		}
+
 	}
 
 }

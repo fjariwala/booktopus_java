@@ -76,7 +76,7 @@
 							class="form-check-label" for="exampleCheck1">Check me out</label>
 						</div>
 
-						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="submit" class="btn btn-outline-primary btn-lg btn-block">Submit</button>
 					</form:form>
 
 			</div>

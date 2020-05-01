@@ -45,7 +45,7 @@
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 
 		<property name="dataSource" ref="myDataSource" />
-		
+
 		<property name="packagesToScan" value="com.bean.Entity" />
 
 		<property name="hibernateProperties">
@@ -67,12 +67,22 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 
 	</bean>
-	
-	<!-- Step : 4 -> Enable configuration of transactional behaviour based on annotations -->
-	<tx:annotation-driven transaction-manager="transactionManager"/>
-	
+
+	<!-- Step : 4 -> Enable configuration of transactional behaviour based on 
+		annotations -->
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
 	<!-- Step : 5 -> Adding support for CSS -->
-	<mvc:resources location="/resources/" mapping="/resources/**"/>
-	
+	<mvc:resources location="/resources/"
+		mapping="/resources/**" />
+
+	<!-- Step :6 -> Adding support for uploading file -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<property name="maxUploadSize" value="3000000" />
+	</bean>
 
 </beans>

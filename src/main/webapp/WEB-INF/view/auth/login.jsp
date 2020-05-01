@@ -49,7 +49,7 @@
 								cssClass="form-control" /> <form:errors path="password"
 								cssClass="error" /></div>
 
-						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="submit" class="btn btn-outline-primary btn-lg btn-block">Submit</button>
 
 						<div class="alert alert-light" role="alert">If you are not
 							registered <a href="register">Click here, </a> to go to registration page

@@ -43,24 +43,32 @@
 				<div class=" col-10 col-md-5 col-lg-4r">
 					<h1 align="center">Upload <span class="badge badge-secondary">Book</span></h1>
 
-					<form:form action="uploadBook" modelAttribute="book" enctype="multipart/form-data" method="POST">
+					<form:form action="uploadBook" method="POST" modelAttribute="book"
+						enctype="multipart/form-data">
 
 						<c:if test="${not empty error}">
 							<div class="alert alert-danger" role="alert">${error}</div>
 						</c:if>
 
 						<div class="form-group"><label for="bookName">Book
-								Name(*)</label> <form:input path="bookName" type="text"
-								cssClass="form-control" /> <form:errors path="bookName"
-								cssClass="error" /></div>
+								Name(*)</label> <form:input path="bookName" required="required"
+								type="text" cssClass="form-control" /> <form:errors
+								path="bookName" cssClass="error" /></div>
+
+						<div class="form-group"><label for="bookAuthor">Book
+								Author(*)</label> <form:input path="bookAuthor" required="required"
+								type="text" cssClass="form-control" /> <form:errors
+								path="bookAuthor" cssClass="error" /></div>
 
 						<div class="form-group"><label for="subCode">Subject
-								Code(*)</label> <form:input path="subjectCode" type="text"
-								cssClass="form-control" /> <form:errors path="subjectCode"
-								cssClass="error" /></div>
+								Code(*)</label> <form:input path="subjectCode" required="required"
+								type="text" cssClass="form-control" /> <form:errors
+								path="subjectCode" cssClass="error" /></div>
 
 						<div class="form-group"><label for="branch">Branch(*)</label>
-							<form:select class="form-control" path="branch">
+							<form:select class="form-control" required="required"
+								path="branch">
+								<form:option value="None" label="None" />
 								<form:option value="COMP" label="Computer Engineering" />
 								<form:option value="EE" label="Electrical Engineering" />
 								<form:option value="ECC"
@@ -71,7 +79,9 @@
 							</form:select> <form:errors path="branch" cssClass="error" /></div>
 
 						<div class="form-group"><label for="sem">Semester(*)</label>
-							<form:select class="form-control" path="semester">
+							<form:select class="form-control" required="required"
+								path="semester">
+								<form:option value="None" label="None" />
 								<form:option value="1" label="1" />
 								<form:option value="2" label="2" />
 								<form:option value="3" label="3" />
@@ -83,7 +93,9 @@
 							</form:select> <form:errors path="semester" cssClass="error" /></div>
 
 						<div class="form-group"><label for="edition">Book
-								Edition(*)</label> <form:select class="form-control" path="bookEdition">
+								Edition(*)</label> <form:select class="form-control" required="required"
+								path="bookEdition">
+								<form:option value="None" label="None" />
 								<form:option value="1" label="1" />
 								<form:option value="2" label="2" />
 								<form:option value="3" label="3" />
@@ -100,11 +112,13 @@
 								value="${id}" cssClass="form-control" /> <form:errors
 								path="uploaderId" cssClass="error" /></div>
 
-						<div class="form-group"><label for="exampleFormControlFile1">Example
-								file input</label> <input type="file" class="form-control-file"
+						<div class="form-group"><label for="exampleFormControlFile1">Upload
+								Cover Photo Of Book</label> <input type="file" accept='image/*'
+							 name="fileUpload" class="form-control-file"
 							id="exampleFormControlFile1"></div>
 
-						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="submit"
+							class="btn btn-outline-primary btn-lg btn-block">Submit</button>
 
 					</form:form>
 

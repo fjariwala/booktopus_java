@@ -1,6 +1,7 @@
 package com.bean.Controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bean.DAO.Book_DAO;
 import com.bean.Entity.BookDetails;
+import com.bean.Hashing.SessionGetter;
 
 @Controller
 @RequestMapping("/book")
@@ -93,10 +95,15 @@ public class Book_Controller {
 	@GetMapping("/getBookData")
 	public String getBook(@RequestParam("bookId") int bookId, Model model, HttpServletRequest req) {
 
-		HttpSession session = req.getSession(false);
-		if (session != null) {
+		// HttpSession session = req.getSession(false);
 
-			String userName = (String) session.getAttribute("name");
+		SessionGetter sessionData = new SessionGetter();
+
+		String userName = sessionData.sessionGetter(req);
+
+		if (userName != null) {
+
+			// String userName = (String) session.getAttribute("name");
 
 			model.addAttribute("user", userName);
 
@@ -112,9 +119,41 @@ public class Book_Controller {
 			// session.invalidate();
 			// model.addAttribute("user", "");
 			System.out.println("Session Ended");
-			return null;
+			return "redirect:/home";
 		}
 
+	}
+
+	@PostMapping("/search")
+	public String searchBooks(@RequestParam("strVal") String regStr, HttpServletRequest req, Model model) {
+
+		HttpSession session = req.getSession(false);
+		String returnStr = null;
+
+		if (session != null) {
+
+			int userId = (Integer) session.getAttribute("id");
+			String userName = (String) session.getAttribute("name");
+
+			List<BookDetails> searchedBooks = bookDao.searchBooks(regStr, userId);
+
+			if (searchedBooks.isEmpty()) {
+
+				System.out.println("No data");
+				model.addAttribute("user", userName);
+				model.addAttribute("books", null);
+				returnStr = "/index";
+			} else {
+//				for (BookDetails bookDetails : searchedBooks) {
+//					System.out.println(bookDetails);
+//				}
+				model.addAttribute("user", userName);
+				model.addAttribute("books", searchedBooks);
+				returnStr = "/index";
+			}
+
+		}
+		return returnStr;
 	}
 
 }

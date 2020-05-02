@@ -14,9 +14,13 @@ public interface Book_DAO {
 
 	/* Get all the books */
 	/* Here id is user's id .. which is used for showing books not owned by user */
-	public List<BookDetails> getBooks(int id);
+	public List<BookDetails> getBooks(int userId);
 
+	/* Get an individual book by book id */
 	public BookDetails getIndividualBook(int bookId);
+
+	/* Search Book */
+	public List<BookDetails> searchBooks(String regexPattern, int userId);
 
 	/* Get the epoch time */
 	public String getEpochTime();

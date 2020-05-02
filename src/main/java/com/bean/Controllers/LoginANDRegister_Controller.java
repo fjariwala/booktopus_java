@@ -117,6 +117,6 @@ public class LoginANDRegister_Controller {
 		HttpSession session = req.getSession();
 		session.invalidate();
 
-		return "redirect:/home";
+		return "redirect:/user/login";
 	}
 }

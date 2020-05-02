@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -75,14 +76,14 @@ public class Book_DAO_Impl implements Book_DAO {
 	}
 
 	@Transactional
-	public List<BookDetails> getBooks(int id) {
+	public List<BookDetails> getBooks(int userId) {
 		// TODO Auto-generated method stub
 
 		Session session = sessionFactory.getCurrentSession();
 
 		try {
 
-			String que = "from BookDetails s where s.availability=1 AND s.uploaderId!=" + id + "	";
+			String que = "from BookDetails s where s.availability=1 AND s.uploaderId!=" + userId + "	";
 
 			Query<BookDetails> books = session.createQuery(que, BookDetails.class);
 			List<BookDetails> storedBooks = books.getResultList();
@@ -146,6 +147,66 @@ public class Book_DAO_Impl implements Book_DAO {
 			System.out.println(e.getMessage());
 			return null;
 		}
+	}
+
+	@Transactional
+	public List<BookDetails> searchBooks(String regexPattern, int userId) {
+		// TODO Auto-generated method stub
+
+//		List<BookDetails> bookDetails = getBooks(userId);
+//
+//		for (BookDetails bookDetails2 : bookDetails) {
+//			System.out.println(bookDetails2);
+//		}
+//
+//		List<BookDetails> searchedBooks = new ArrayList<BookDetails>();
+//
+//		Pattern p = Pattern.compile(regexPattern);
+//
+//		for (BookDetails data : bookDetails) {
+//
+//			if (p.matcher(data.getBookName()).matches()) {
+//				searchedBooks.add(data);
+//			}
+//		}
+//
+//		for (BookDetails searched : searchedBooks) {
+//			System.out.println("into the searched one");
+//			System.out.println(searched);
+//		}
+//
+//		if (searchedBooks.isEmpty()) {
+//			return null;
+//		} else {
+//			return searchedBooks;
+//		}
+
+		Session session = sessionFactory.getCurrentSession();
+
+		String query = "from BookDetails b where b.bookName LIKE:testVar	";
+		Query<BookDetails> que = session.createQuery(query, BookDetails.class);
+		que.setParameter("testVar", "%" + regexPattern + "%");
+
+		/* Here all the books are stored */
+		List<BookDetails> newData = que.getResultList();
+
+		/* In this list we save that books only which are not uploaded by user */
+		List<BookDetails> sortedData = new ArrayList<BookDetails>();
+
+		/*
+		 * Here uplaoder id != userId means , We will not show any books which are
+		 * uploaded by logged in user, We will just show that books which are not
+		 * uploaded by logged in user
+		 */
+		for (BookDetails bookDetails : newData) {
+
+			if (bookDetails.getUploaderId() != userId) {
+				sortedData.add(bookDetails);
+			}
+		}
+
+		return sortedData;
+
 	}
 
 }

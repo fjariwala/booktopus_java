@@ -32,7 +32,7 @@
 	<!-- Navbar starts -->
 	<div class="container">
 		<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">Booktopus</a>
+			<a class="navbar-brand" href="/Booktopus/home">Booktopus</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarTogglerDemo02"
 			aria-controls="navbarTogglerDemo02" aria-expanded="false"
@@ -41,7 +41,7 @@
 
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<li class="nav-item active"><a class="nav-link" href="home">
+					<li class="nav-item active"><a class="nav-link" href="/Booktopus/home">
 							Home <span class="sr-only">(current)</span>
 					</a></li>
 
@@ -54,25 +54,27 @@
 								role="button" data-toggle="dropdown" aria-haspopup="true"
 								aria-expanded="false">${user }</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="user/profile">Profile</a> <a
-									class="dropdown-item" href="book/uploadBook">Upload Book</a>
+									<a class="dropdown-item" href="/Booktopus/user/profile">Profile</a> <a
+									class="dropdown-item" href="/Booktopus/book/uploadBook">Upload Book</a>
 									<div class="dropdown-divider"></div> <a class="dropdown-item"
-									href="user/logout">Logout</a>
+									href="/Booktopus/user/logout">Logout</a>
 							</div></li>
 
 						</c:when>
+
 						<c:otherwise>
 							<li class="nav-item active"><a class="nav-link"
-								href="user/login">Login</a></li>
+								href="/Booktopus/user/login">Login</a></li>
 							<li class="nav-item active"><a class="nav-link"
-								href="user/register">Register</a></li>
+								href="/Booktopus/user/register">Register</a></li>
 						</c:otherwise>
 
 					</c:choose>
 
 			</ul>
-				<form class="form-inline my-2 my-lg-0"><input
-					class="form-control mr-sm-2" type="search" placeholder="Search">
+				<form class="form-inline my-2 my-lg-0" method="post"
+				action="/Booktopus/book/search"><input class="form-control mr-sm-2"
+					type="search" name="strVal" placeholder="Search">
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 			</form>
 		</div>
@@ -92,25 +94,46 @@
 
 
 
-		<div class="row"><c:forEach var="book" items="${books }">
 
-				<!-- This link is used for update the data -->
-				<c:url var="getBookLink" value="/book/getBookData">
-					<c:param name="bookId" value="${book.id }" />
-				</c:url>
+		<div class="row">
+			<!-- 1) This is when the book data is passed, means data are not null-->
+			<!-- 2) This is when no book data is passed. Means data is empty -->
+			<c:choose>
 
-				<div class="col-xs-6 col-md-3 "><br />
-					<div class="card" style="width: 16rem;"><img
-						src="resources/uploads/${book.imageName }" height="319px"
-						class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">${book.bookName }</h5>
-							<p class="card-text">${book.subjectCode }</p> <a
-							href="${getBookLink }" class="btn btn-primary">More
-								Information</a>
-					</div></div></div>
 
-			</c:forEach></div>
+				<c:when test="${not empty books}">
+
+					<c:forEach var="book" items="${books }">
+
+						<!-- This link is used for update the data -->
+						<c:url var="getBookLink" value="/book/getBookData">
+							<c:param name="bookId" value="${book.id }" />
+						</c:url>
+
+						<div class="col-xs-6 col-md-3 "><br />
+							<div class="card" style="width: 16rem;"><img
+								src="/Booktopus/resources/uploads/${book.imageName }"
+								height="319px" class="card-img-top" alt="...">
+								<div class="card-body">
+									<h5 class="card-title">${book.bookName }</h5>
+									<p class="card-text">${book.subjectCode }</p> <a
+									href="${getBookLink }" class="btn btn-primary">More
+										Information</a>
+							</div></div></div>
+
+					</c:forEach>
+
+				</c:when>
+
+
+				<c:otherwise>
+					<br />
+					<br />
+					<h5>No books available..</h5>
+				</c:otherwise>
+
+			</c:choose>
+	</div>
 
 </div>
 

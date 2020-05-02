@@ -32,7 +32,7 @@
 	<!-- Navbar starts -->
 	<div class="container">
 		<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">Booktopus</a>
+			<a class="navbar-brand" href="/Booktopus/home">Booktopus</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarTogglerDemo02"
 			aria-controls="navbarTogglerDemo02" aria-expanded="false"
@@ -41,10 +41,42 @@
 
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+					<li class="nav-item active"><a class="nav-link" href="home">
+							Home <span class="sr-only">(current)</span>
+					</a></li>
+
+					<c:choose>
+
+						<c:when test="${not empty user}">
+
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+								role="button" data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">${user }</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="/Booktopus/user/profile">Profile</a>
+									<a class="dropdown-item" href="/Booktopus/book/uploadBook">Upload
+										Book</a>
+									<div class="dropdown-divider"></div> <a class="dropdown-item"
+									href="/Booktopus/user/logout">Logout</a>
+							</div></li>
+
+						</c:when>
+
+						<c:otherwise>
+							<li class="nav-item active"><a class="nav-link"
+								href="/Booktopus/user/login">Login</a></li>
+							<li class="nav-item active"><a class="nav-link"
+								href="/Booktopus/user/register">Register</a></li>
+						</c:otherwise>
+
+					</c:choose>
 
 			</ul>
-				<form class="form-inline my-2 my-lg-0"><input
-					class="form-control mr-sm-2" type="search" placeholder="Search">
+				<form class="form-inline my-2 my-lg-0" method="post"
+				action="/Booktopus/book/search"><input
+					class="form-control mr-sm-2" type="search" name="strVal"
+					placeholder="Search">
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 			</form>
 		</div>
@@ -59,22 +91,23 @@
 		<!-- Content here --> <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
 		<div class="row">
 
-			<div class="col-xs-6 col-md-3 "><br />
-				<div class="card" style="width: 16rem;"><img
-					src="/Booktopus/resources/uploads/${book.imageName }" height="319px"
-					class="card-img-top" alt="...">
+			<div class="col-md-8"><br />
+				<div class="card" style="width: 22rem;"><img
+					src="/Booktopus/resources/uploads/${book.imageName }"
+					height="450px" width="350px" class="card-img-top" alt="..."></div>
+		</div>
+			<div class="col-md-6">
 
-					<div class="card-body">
-						<h5 class="card-title">${book.bookName }</h5>
-						<p class="card-text">${book.subjectCode }</p> <a href="*"
-						class="btn btn-primary">Request</a>
+				<h5>Name : ${book.bookName }</h5>
+				<p>Subject Code : ${book.subjectCode }</p> <a href="*"
+				class="btn btn-primary">Request</a>
 
-				</div></div></div>
+		</div>
 	</div>
 
 </div>
 
-	</div>
+
 
 	<!-- Book Component Ends -->
 

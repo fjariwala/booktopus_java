@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bean.DAO.Book_DAO;
+import com.bean.DAO.Notification_DAO;
+import com.bean.DAO.User_DAO;
 import com.bean.Entity.BookDetails;
+import com.bean.Entity.NotificationClass;
+import com.bean.Entity.UserDetails;
 import com.bean.Hashing.SessionGetter;
 
 @Controller
@@ -32,6 +36,12 @@ public class Book_Controller {
 	 */
 	@Autowired
 	private Book_DAO bookDao;
+
+	@Autowired
+	private User_DAO userDao;
+
+	@Autowired
+	private Notification_DAO notifyDao;
 
 	/*
 	 * We use @InitBinder annotation to remove front and back white spaces. How it
@@ -108,7 +118,7 @@ public class Book_Controller {
 			model.addAttribute("user", userName);
 
 			BookDetails bookData = bookDao.getIndividualBook(bookId);
-			System.out.println(bookData);
+			// System.out.println(bookData);
 
 			model.addAttribute("book", bookData);
 
@@ -153,6 +163,43 @@ public class Book_Controller {
 			}
 
 		}
+		return returnStr;
+	}
+
+	@GetMapping("/reqForBook")
+	public String requestForBook(@RequestParam("bookId") int req_book_id, Model model, HttpServletRequest req) {
+
+		String returnStr = null;
+		int requested_by_id;
+
+		HttpSession session = req.getSession(false);
+		if (session != null) {
+
+			/* This id will be the current logged in user's id */
+			requested_by_id = (Integer) session.getAttribute("id");
+			String userName = (String) session.getAttribute("name");
+
+			BookDetails bookData = bookDao.getIndividualBook(req_book_id);
+			UserDetails userData = userDao.getIndividualuser(requested_by_id);
+			List<NotificationClass> notifyData = notifyDao.getAllNotifications();
+
+			Boolean result = bookDao.setNotification(bookData, userData, notifyData);
+
+			model.addAttribute("user", userName);
+
+			if (result == false) {
+
+				model.addAttribute("notificationIsSetOrNot", "This book is already been requested by someone");
+
+				returnStr = "/books/bookIsAlRequested";
+
+			} else {
+
+				returnStr = "redirect:/user/pendingRequests";
+			}
+
+		}
+
 		return returnStr;
 	}
 

@@ -41,8 +41,8 @@
 
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<li class="nav-item active"><a class="nav-link" href="/Booktopus/home">
-							Home <span class="sr-only">(current)</span>
+					<li class="nav-item active"><a class="nav-link"
+						href="/Booktopus/home"> Home <span class="sr-only">(current)</span>
 					</a></li>
 
 					<c:choose>
@@ -54,8 +54,10 @@
 								role="button" data-toggle="dropdown" aria-haspopup="true"
 								aria-expanded="false">${user }</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="/Booktopus/user/profile">Profile</a> <a
-									class="dropdown-item" href="/Booktopus/book/uploadBook">Upload Book</a>
+									<a class="dropdown-item" href="/Booktopus/user/profile">Profile</a>
+									<a class="dropdown-item" href="/Booktopus/user/pendingRequests">Pending
+										Requests</a> <a class="dropdown-item"
+									href="/Booktopus/book/uploadBook">Upload Book</a>
 									<div class="dropdown-divider"></div> <a class="dropdown-item"
 									href="/Booktopus/user/logout">Logout</a>
 							</div></li>
@@ -73,8 +75,9 @@
 
 			</ul>
 				<form class="form-inline my-2 my-lg-0" method="post"
-				action="/Booktopus/book/search"><input class="form-control mr-sm-2"
-					type="search" name="strVal" placeholder="Search">
+				action="/Booktopus/book/search"><input
+					class="form-control mr-sm-2" type="search" name="strVal"
+					placeholder="Search">
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 			</form>
 		</div>

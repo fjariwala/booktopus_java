@@ -13,4 +13,7 @@ public interface User_DAO {
 	/* Check wheather the user is registered or not wali method */
 	public UserDetails checkUser(UserDetails userData);
 
+	/* This method will be used to Get current user details */
+	public UserDetails getIndividualuser(int userId);
+
 }

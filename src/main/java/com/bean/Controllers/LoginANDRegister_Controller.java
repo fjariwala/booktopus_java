@@ -1,5 +1,7 @@
 package com.bean.Controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bean.DAO.Book_DAO;
+import com.bean.DAO.Notification_DAO;
 import com.bean.DAO.User_DAO;
+import com.bean.Entity.NotificationClass;
 import com.bean.Entity.UserDetails;
 
 @Controller
@@ -25,6 +30,12 @@ public class LoginANDRegister_Controller {
 
 	@Autowired
 	private User_DAO userDao;
+
+	@Autowired
+	private Book_DAO bookDao;
+
+	@Autowired
+	private Notification_DAO notifyDao;
 
 	/*
 	 * We use @InitBinder annotation to remove front and back white spaces. How it
@@ -73,7 +84,7 @@ public class LoginANDRegister_Controller {
 			} else {
 
 				String result = userDao.registerUser(user);
-				return "redirect:/home";
+				return "redirect:/user/login";
 			}
 		}
 	}
@@ -118,5 +129,34 @@ public class LoginANDRegister_Controller {
 		session.invalidate();
 
 		return "redirect:/user/login";
+	}
+
+	/* Get mapping to get the pending requests */
+	@GetMapping("/pendingRequests")
+	public String getAllPendingRequests(HttpServletRequest req, Model model) {
+
+		HttpSession session = req.getSession(false);
+
+		if (session != null) {
+
+			/* Getting logged in user's data */
+			String userName = (String) session.getAttribute("name");
+			int userId = (Integer) session.getAttribute("id");
+			model.addAttribute("user", userName);
+
+			/* Getting notifications for the current user */
+			List<NotificationClass> resultNotifications = notifyDao.getNotificationForUser(userId);
+
+//			for (NotificationClass nData : resultNotifications) {
+//				System.out.println(nData.getRequested_book_name());
+//			}
+
+			model.addAttribute("notifications", resultNotifications);
+
+			return "/books/pendingReqPage";
+		} else {
+			model.addAttribute("reLogin", "Please log in again..");
+			return "/books/pendingReqPage";
+		}
 	}
 }

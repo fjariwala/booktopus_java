@@ -20,6 +20,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bean.Entity.BookDetails;
+import com.bean.Entity.NotificationClass;
+import com.bean.Entity.UserDetails;
 
 /*
  * This annotation automatically registers our DAO class into the dispatcher-servlet.xml file
@@ -35,6 +37,7 @@ public class Book_DAO_Impl implements Book_DAO {
 	 */
 	@Autowired
 	private SessionFactory sessionFactory;
+	private Boolean returnValue;
 
 	/*
 	 * @Transactional => This annotation is used for : When we use this annotation
@@ -153,34 +156,6 @@ public class Book_DAO_Impl implements Book_DAO {
 	public List<BookDetails> searchBooks(String regexPattern, int userId) {
 		// TODO Auto-generated method stub
 
-//		List<BookDetails> bookDetails = getBooks(userId);
-//
-//		for (BookDetails bookDetails2 : bookDetails) {
-//			System.out.println(bookDetails2);
-//		}
-//
-//		List<BookDetails> searchedBooks = new ArrayList<BookDetails>();
-//
-//		Pattern p = Pattern.compile(regexPattern);
-//
-//		for (BookDetails data : bookDetails) {
-//
-//			if (p.matcher(data.getBookName()).matches()) {
-//				searchedBooks.add(data);
-//			}
-//		}
-//
-//		for (BookDetails searched : searchedBooks) {
-//			System.out.println("into the searched one");
-//			System.out.println(searched);
-//		}
-//
-//		if (searchedBooks.isEmpty()) {
-//			return null;
-//		} else {
-//			return searchedBooks;
-//		}
-
 		Session session = sessionFactory.getCurrentSession();
 
 		String query = "from BookDetails b where b.bookName LIKE:testVar	";
@@ -207,6 +182,168 @@ public class Book_DAO_Impl implements Book_DAO {
 
 		return sortedData;
 
+	}
+
+	@Transactional
+	public Boolean setNotification(BookDetails bookData, UserDetails userData,
+			List<NotificationClass> notificationData) {
+		// TODO Auto-generated method stub
+
+		Session session = sessionFactory.getCurrentSession();
+
+		Boolean returnValue = null;
+
+		int length = notificationData.size();
+		System.out.println(length);
+
+		/* If the table is empty then directly add notification to the table */
+		if (notificationData.isEmpty()) {
+
+			NotificationClass notify = new NotificationClass();
+
+			/*
+			 * 0 -> for pending ...... 1-> for accepted ...... -1 -> for rejected
+			 */
+			notify.setCurrent_status(0);
+
+			/* Which book is requested ? */
+			notify.setRequested_book_id(bookData.getId());
+
+			/* Name of the book which is requested? */
+			notify.setRequested_book_name(bookData.getBookName());
+
+			/* Which user requested the book ? */
+			notify.setRequested_by_id(userData.getId());
+
+			/* User names ? */
+			notify.setRequested_by_name(userData.getFirstName() + " " + userData.getLastName());
+
+			/* Uploaded by which user ? */
+			notify.setUploaded_by_id(bookData.getUploaderId());
+
+			session.saveOrUpdate(notify);
+
+			/* Here we decrease the availability of book from 1 -> 0 */
+			bookData.setAvailability(0);
+
+			session.saveOrUpdate(bookData);
+
+			return true;
+
+		}
+
+		/* If there is only one notification in the table */
+		if (notificationData.size() == 1) {
+
+			NotificationClass notifyOneNotification = notificationData.get(0);
+			System.out.println(notifyOneNotification.getRequested_book_name());
+
+			if (notifyOneNotification.getRequested_book_id() == bookData.getId()) {
+
+				return false;
+
+			} else {
+
+				NotificationClass notify = new NotificationClass();
+
+				/*
+				 * 0 -> for pending ...... 1-> for accepted ...... -1 -> for rejected
+				 */
+				notify.setCurrent_status(0);
+
+				/* Which book is requested ? */
+				notify.setRequested_book_id(bookData.getId());
+
+				/* Name of the book which is requested? */
+				notify.setRequested_book_name(bookData.getBookName());
+
+				/* Which user requested the book ? */
+				notify.setRequested_by_id(userData.getId());
+
+				/* User names ? */
+				notify.setRequested_by_name(userData.getFirstName() + " " + userData.getLastName());
+
+				/* Uploaded by which user ? */
+				notify.setUploaded_by_id(bookData.getUploaderId());
+
+				session.saveOrUpdate(notify);
+
+				/* Here we decrease the availability of book from 1 -> 0 */
+				bookData.setAvailability(0);
+
+				session.saveOrUpdate(bookData);
+
+				return true;
+
+			}
+		}
+
+		/* 0 -> Means the notification doesn't exists */
+		int isNotificationExists = 0;
+		/* If the list size is more than 1 */
+		/* True -> Notification set ..... False -> No access .. Already exists */
+		for (NotificationClass notifyObj : notificationData) {
+
+			if (notifyObj.getRequested_book_id() == bookData.getId()) {
+				/* 1 -> means that the notification already exists */
+				isNotificationExists = 1;
+				return false;
+				// return false;
+			}
+		}
+
+		// System.out.println(isNotificationExists);
+		/* We will go into this .. if the notification doesn't exists */
+		if (isNotificationExists != 1) {
+
+			System.out.println("into multiple onme");
+
+			NotificationClass notify = new NotificationClass();
+
+			/*
+			 * 0 -> for pending ...... 1-> for accepted ...... -1 -> for rejected
+			 */
+			notify.setCurrent_status(0);
+
+			/* Which book is requested ? */
+			notify.setRequested_book_id(bookData.getId());
+
+			/* Name of the book which is requested? */
+			notify.setRequested_book_name(bookData.getBookName());
+
+			/* Which user requested the book ? */
+			notify.setRequested_by_id(userData.getId());
+
+			/* User names ? */
+			notify.setRequested_by_name(userData.getFirstName() + " " + userData.getLastName());
+
+			/* Uploaded by which user ? */
+			notify.setUploaded_by_id(bookData.getUploaderId());
+
+			session.saveOrUpdate(notify);
+
+			/* Here we decrease the availability of book from 1 -> 0 */
+			bookData.setAvailability(0);
+
+			session.saveOrUpdate(bookData);
+
+			return true;
+		}
+
+		return true;
+	}
+
+	@Transactional
+	public List<NotificationClass> getAllNotifications() {
+		// TODO Auto-generated method stub
+
+		Session session = sessionFactory.getCurrentSession();
+
+		String query = "from NotificationClass";
+		Query<NotificationClass> que = session.createQuery(query, NotificationClass.class);
+		List<NotificationClass> resultedNotifications = que.getResultList();
+
+		return resultedNotifications;
 	}
 
 }

@@ -25,7 +25,7 @@
 	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 	crossorigin="anonymous"></script>
 
-<title>Book Information</title>
+<title>Pending Requests</title>
 </head>
 <body>
 
@@ -41,8 +41,8 @@
 
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<li class="nav-item active"><a class="nav-link" href="/Booktopus/home">
-							Home <span class="sr-only">(current)</span>
+					<li class="nav-item active"><a class="nav-link"
+						href="/Booktopus/home"> Home <span class="sr-only">(current)</span>
 					</a></li>
 
 					<c:choose>
@@ -55,8 +55,9 @@
 								aria-expanded="false">${user }</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="/Booktopus/user/profile">Profile</a>
-									<a class="dropdown-item" href="/Booktopus/book/uploadBook">Upload
-										Book</a>
+									<a class="dropdown-item" href="/Booktopus/user/pendingRequests">Pending
+										Requests</a> <a class="dropdown-item"
+									href="/Booktopus/book/uploadBook">Upload Book</a>
 									<div class="dropdown-divider"></div> <a class="dropdown-item"
 									href="/Booktopus/user/logout">Logout</a>
 							</div></li>
@@ -84,40 +85,36 @@
 </div>
 	<!-- Navbar Ends -->
 
-	<!-- Book Component Starts-->
-	<c:if test="${not empty notificationIsSetOrNot}">
-		<div class="alert alert-success" role="alert">${notificationIsSetOrNot}</div>
-	</c:if>
-	<br />
-	<br />
-	<div class="container">
-	
-	<c:url var="getReqLink" value="/book/reqForBook" >
-		<c:param name="bookId" value="${book.id }"></c:param>
-	</c:url>
-	
-		<!-- Content here --> <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-		<div class="row">
-
-			<div class="col-md-8"><br />
-				<div class="card" style="width: 22rem;"><img
-					src="/Booktopus/resources/uploads/${book.imageName }"
-					height="450px" width="350px" class="card-img-top" alt="..."></div>
-		</div>
-			<div class="col-md-6">
-
-				<h5>Name : ${book.bookName }</h5>
-				<p>Subject Code : ${book.subjectCode }</p> <a href="${ getReqLink}"
-				class="btn btn-primary">Request</a>
-
-		</div>
-	</div>
-
-</div>
-
-
-
-	<!-- Book Component Ends -->
+	<!-- Pending request table Starts -->
+	<div class="container"><br /> <br /> <br />
+		<div class="alert alert-primary justify-content-center" role="alert">Your
+			pending requests will be shown here</div>
+		<table class="table">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Book Name</th>
+					<th scope="col">Is Requested By</th>
+					<th scope="col">Contact Detail</th>
+					<th scope="col">Accept</th>
+					<th scope="col">Reject</th>
+			</tr>
+		</thead>
+		
+		<c:forEach var="notify" items="${ notifications}">
+		<tbody>
+				<tr>
+					<th scope="row">${notify.requested_book_name }</th>
+					<td>${notify.requested_by_name }</td>
+					<td>****</td>
+					<td><button type="button" class="btn btn-success">Accept</button></td>
+					<td><button type="button" class="btn btn-danger">Reject</button></td>
+				</tr>
+			</tbody>
+		</c:forEach>
+		
+			
+	</table></div>
+	<!-- Pending request table Ends -->
 
 </body>
 </html>

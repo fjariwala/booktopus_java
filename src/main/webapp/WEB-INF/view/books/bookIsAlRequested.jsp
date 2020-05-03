@@ -8,6 +8,7 @@
 <head>
 <meta charset="ISO-8859-1">
 
+
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
@@ -25,7 +26,8 @@
 	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 	crossorigin="anonymous"></script>
 
-<title>Book Information</title>
+
+<title>Information</title>
 </head>
 <body>
 
@@ -41,8 +43,8 @@
 
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<li class="nav-item active"><a class="nav-link" href="/Booktopus/home">
-							Home <span class="sr-only">(current)</span>
+					<li class="nav-item active"><a class="nav-link"
+						href="/Booktopus/home"> Home <span class="sr-only">(current)</span>
 					</a></li>
 
 					<c:choose>
@@ -83,41 +85,11 @@
 	</nav>
 </div>
 	<!-- Navbar Ends -->
+	<div class="container"><br /> <br /> <br /> <c:if
+			test="${not empty notificationIsSetOrNot }">
+			<div class="alert alert-danger" role="alert">${notificationIsSetOrNot }</div>
+		</c:if></div>
 
-	<!-- Book Component Starts-->
-	<c:if test="${not empty notificationIsSetOrNot}">
-		<div class="alert alert-success" role="alert">${notificationIsSetOrNot}</div>
-	</c:if>
-	<br />
-	<br />
-	<div class="container">
-	
-	<c:url var="getReqLink" value="/book/reqForBook" >
-		<c:param name="bookId" value="${book.id }"></c:param>
-	</c:url>
-	
-		<!-- Content here --> <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-		<div class="row">
-
-			<div class="col-md-8"><br />
-				<div class="card" style="width: 22rem;"><img
-					src="/Booktopus/resources/uploads/${book.imageName }"
-					height="450px" width="350px" class="card-img-top" alt="..."></div>
-		</div>
-			<div class="col-md-6">
-
-				<h5>Name : ${book.bookName }</h5>
-				<p>Subject Code : ${book.subjectCode }</p> <a href="${ getReqLink}"
-				class="btn btn-primary">Request</a>
-
-		</div>
-	</div>
-
-</div>
-
-
-
-	<!-- Book Component Ends -->
 
 </body>
 </html>

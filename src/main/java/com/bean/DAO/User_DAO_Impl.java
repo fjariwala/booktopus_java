@@ -113,4 +113,15 @@ public class User_DAO_Impl implements User_DAO {
 		return user;
 	}
 
+	@Transactional
+	public UserDetails getIndividualuser(int userId) {
+		// TODO Auto-generated method stub
+
+		Session session = sessionFactory.getCurrentSession();
+
+		UserDetails userData = session.get(UserDetails.class, userId);
+
+		return userData;
+	}
+
 }

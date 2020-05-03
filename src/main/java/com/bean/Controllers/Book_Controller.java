@@ -195,12 +195,43 @@ public class Book_Controller {
 
 			} else {
 
-				returnStr = "redirect:/user/pendingRequests";
+				returnStr = "redirect:/user/userRequests";
 			}
 
 		}
 
 		return returnStr;
+	}
+
+	@GetMapping("/acceptBook")
+	public String acceptBookRequest(@RequestParam("notificationId") int notificationId, Model model) {
+
+		Boolean acceptReq = true;
+		Boolean rejectReq = false;
+
+		NotificationClass notifData = notifyDao.getIndividualNotificationForAcceptAndReject(notificationId, acceptReq,
+				rejectReq);
+
+		System.out.println(notifData);
+
+		return "redirect:/user/pendingRequests";
+	}
+
+	@GetMapping("/rejectBook")
+	public String rejecttBookRequest(@RequestParam("notificationId") int notificationId, Model model) {
+
+		Boolean acceptReq = false;
+		Boolean rejectReq = true;
+
+		NotificationClass notifData = notifyDao.getIndividualNotificationForAcceptAndReject(notificationId, acceptReq,
+				rejectReq);
+
+		/* Setting book id's visibility to 1 */
+		int bookId = notifData.getRequested_book_id();
+
+		System.out.println(notifData);
+
+		return "redirect:/user/pendingRequests";
 	}
 
 }

@@ -57,7 +57,9 @@
 									<a class="dropdown-item" href="/Booktopus/user/profile">Profile</a>
 									<a class="dropdown-item" href="/Booktopus/user/pendingRequests">Pending
 										Requests</a> <a class="dropdown-item"
-									href="/Booktopus/book/uploadBook">Upload Book</a>
+									href="/Booktopus/user/userRequests">Your Requests</a> <a
+									class="dropdown-item" href="/Booktopus/book/uploadBook">Upload
+										Book</a>
 									<div class="dropdown-divider"></div> <a class="dropdown-item"
 									href="/Booktopus/user/logout">Logout</a>
 							</div></li>

@@ -25,7 +25,7 @@
 	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 	crossorigin="anonymous"></script>
 
-<title>Book Information</title>
+<title>Your Status</title>
 </head>
 <body>
 
@@ -57,9 +57,9 @@
 									<a class="dropdown-item" href="/Booktopus/user/profile">Profile</a>
 									<a class="dropdown-item" href="/Booktopus/user/pendingRequests">Pending
 										Requests</a> <a class="dropdown-item"
-									href="/Booktopus/book/uploadBook">Upload Book</a> <a
-									class="dropdown-item" href="/Booktopus/user/userRequests">Your
-										Requests</a>
+									href="/Booktopus/user/userRequests">Your Requests</a> <a
+									class="dropdown-item" href="/Booktopus/book/uploadBook">Upload
+										Book</a>
 									<div class="dropdown-divider"></div> <a class="dropdown-item"
 									href="/Booktopus/user/logout">Logout</a>
 							</div></li>
@@ -87,39 +87,52 @@
 </div>
 	<!-- Navbar Ends -->
 
-	<!-- Book Component Starts-->
-	<c:if test="${not empty notificationIsSetOrNot}">
-		<div class="alert alert-success" role="alert">${notificationIsSetOrNot}</div>
-	</c:if>
+	<!-- Pending request table Starts -->
+	<div class="container"><br /> <br /> <br />
+		<div class="alert alert-primary justify-content-center" role="alert">Here,
+			we will show the status of your requested books</div>
+		<table class="table">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Request Id</th>
+					<th scope="col">Requested Book Name</th>
+					<th scope="col">Contact Number</th>
+					<th scope="col">Status</th>
+					<th scope="col">Cancel</th>
+			</tr>
+		</thead>
+			<c:forEach var="notify" items="${ notifications}">
+				<tbody>
+					<tr>
+						<th scope="row">${notify.id }</th>
+						<td>${notify.requested_book_name }</td>
+						<td>9898271273</td>
 
-	<br />
-	<br />
-	<div class="container">
-	
-		<c:url var="getReqLink" value="/book/reqForBook">
-			<c:param name="bookId" value="${book.id }"></c:param>
-		</c:url>
-		
-		 <!-- Content here --> <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-		<div class="row">
+						<c:if test="${notify.current_status==0}">
 
-			<div class="col-md-8"><br />
-				<div class="card" style="width: 22rem;"><img
-					src="/Booktopus/resources/uploads/${book.imageName }"
-					height="450px" width="350px" class="card-img-top" alt="..."></div>
-				</div>
-			<div class="col-md-6">
+							<td><span class="badge badge-secondary">Pending</span></td>
 
-				<h5>Name : ${book.bookName }</h5>
-				<p>Subject Code : ${book.subjectCode }</p> <a href="${ getReqLink}"
-				class="btn btn-primary">Request</a>
+						</c:if>
 
-		</div>
-	</div></div>
+						<c:if test="${notify.current_status==1}">
 
+							<td><span class="badge badge-danger">Rejected</span></td>
 
+						</c:if>
 
-	<!-- Book Component Ends -->
+						<c:if test="${notify.current_status==-1}">
+
+							<td><span class="badge badge-success">Accepted</span></td>
+
+						</c:if>
+
+						<td><button type="button" class="btn btn-dark">Cancel</button></td>
+				</tr>
+				</tbody>
+			</c:forEach>
+
+	</table></div>
+	<!-- Pending request table Ends -->
 
 </body>
 </html>

@@ -159,4 +159,36 @@ public class LoginANDRegister_Controller {
 			return "/books/pendingReqPage";
 		}
 	}
+
+	@GetMapping("/userRequests")
+	public String showUserRequestsStatus(Model model, HttpServletRequest req) {
+
+		HttpSession session = req.getSession(false);
+
+		if (session != null) {
+
+			/* Getting logged in user's data */
+			String userName = (String) session.getAttribute("name");
+			int userId = (Integer) session.getAttribute("id");
+			model.addAttribute("user", userName);
+
+			/* Getting all the notifications made by current user */
+			List<NotificationClass> resultedNotifications = notifyDao.getNotificationMadeByTheUser(userId);
+
+//			for (NotificationClass notificationClass : resultedNotifications) {
+//				System.out.println(notificationClass);
+//			}
+
+			model.addAttribute("notifications", resultedNotifications);
+
+			return "/books/userRequestsStatusPage";
+
+		} else {
+
+			model.addAttribute("reLogin", "Please log in again..");
+			// return "/books/pendingReqPage";
+
+		}
+		return null;
+	}
 }

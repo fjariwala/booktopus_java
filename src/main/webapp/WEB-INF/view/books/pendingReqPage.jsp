@@ -57,7 +57,9 @@
 									<a class="dropdown-item" href="/Booktopus/user/profile">Profile</a>
 									<a class="dropdown-item" href="/Booktopus/user/pendingRequests">Pending
 										Requests</a> <a class="dropdown-item"
-									href="/Booktopus/book/uploadBook">Upload Book</a>
+									href="/Booktopus/user/userRequests">Your Requests</a> <a
+									class="dropdown-item" href="/Booktopus/book/uploadBook">Upload
+										Book</a>
 									<div class="dropdown-divider"></div> <a class="dropdown-item"
 									href="/Booktopus/user/logout">Logout</a>
 							</div></li>
@@ -99,20 +101,49 @@
 					<th scope="col">Reject</th>
 			</tr>
 		</thead>
-		
-		<c:forEach var="notify" items="${ notifications}">
-		<tbody>
-				<tr>
-					<th scope="row">${notify.requested_book_name }</th>
-					<td>${notify.requested_by_name }</td>
-					<td>****</td>
-					<td><button type="button" class="btn btn-success">Accept</button></td>
-					<td><button type="button" class="btn btn-danger">Reject</button></td>
-				</tr>
-			</tbody>
-		</c:forEach>
-		
+
+			<c:forEach var="notify" items="${ notifications}">
 			
+			<c:url var="getAcceptLink" value="/book/acceptBook">
+				<c:param name="notificationId" value="${notify.id }"></c:param>
+			</c:url>
+			
+			<c:url var="getRejectLink" value="/book/rejectBook">
+				<c:param name="notificationId" value="${notify.id }"></c:param>
+			</c:url>
+			
+				<tbody>
+					<tr>
+						<th scope="row">${notify.requested_book_name }</th>
+						<td>${notify.requested_by_name }</td>
+						<td>****</td>
+						
+						<c:if test="${notify.current_status==0}">
+
+							<td><a  href="${getAcceptLink }" ><button type="button"class="btn btn-success">Accept</button></a></td>
+							<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger">Reject</button></a></td>
+
+						</c:if>
+						
+						<c:if test="${notify.current_status==-1}">
+
+							<td><a  href="${getAcceptLink }" ><button type="button" class="btn btn-success" disabled>Accept</button></a></td>
+							<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger">Reject</button></a></td>
+
+						</c:if>
+						
+						<c:if test="${notify.current_status==1}">
+
+							<td><a  href="${getAcceptLink }" ><button type="button" class="btn btn-success" disabled>Accept</button></a></td>
+							<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger" disabled>Reject</button></a></td>
+
+						</c:if>
+						
+				</tr>
+				</tbody>
+			</c:forEach>
+
+
 	</table></div>
 	<!-- Pending request table Ends -->
 

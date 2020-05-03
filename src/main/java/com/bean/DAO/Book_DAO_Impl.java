@@ -181,7 +181,6 @@ public class Book_DAO_Impl implements Book_DAO {
 		}
 
 		return sortedData;
-
 	}
 
 	@Transactional

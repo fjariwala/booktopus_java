@@ -19,4 +19,11 @@ public interface Notification_DAO {
 	/* To show which requests the user had made */
 	public List<NotificationClass> getNotificationMadeByTheUser(int userId);
 
+	/* Cancel book using notification id .. Okay?? */
+	public Boolean toCancelTheNotification(int notificationId);
+
+	/* To get an individual notification by it's id */
+	// public NotificationClass getIndividualNotificationByItsId(int
+	// notificationId);
+
 }

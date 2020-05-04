@@ -113,13 +113,16 @@ public class Book_Controller {
 
 		if (userName != null) {
 
-			// String userName = (String) session.getAttribute("name");
-
 			model.addAttribute("user", userName);
 
 			BookDetails bookData = bookDao.getIndividualBook(bookId);
-			// System.out.println(bookData);
 
+			int uploaderId = bookData.getUploaderId();
+
+			UserDetails userData = userDao.getIndividualuser(uploaderId);
+
+			model.addAttribute("uploaderName", userData.getFirstName() + " " + userData.getLastName());
+			model.addAttribute("contactNumber", userData.getPhone());
 			model.addAttribute("book", bookData);
 
 			return "/books/bookPage";
@@ -129,7 +132,7 @@ public class Book_Controller {
 			// session.invalidate();
 			// model.addAttribute("user", "");
 			System.out.println("Session Ended");
-			return "redirect:/home";
+			return "redirect:/user/login";
 		}
 
 	}
@@ -227,11 +230,25 @@ public class Book_Controller {
 				rejectReq);
 
 		/* Setting book id's visibility to 1 */
-		int bookId = notifData.getRequested_book_id();
+		// int bookId = notifData.getRequested_book_id();
 
 		System.out.println(notifData);
 
 		return "redirect:/user/pendingRequests";
+	}
+
+	@GetMapping("/cancelBookData")
+	public String cancelBookData(@RequestParam("cancelId") int cancelRequestId, Model model) {
+
+		String returnSTMT = null;
+
+		Boolean result = notifyDao.toCancelTheNotification(cancelRequestId);
+
+		if (result == true) {
+			returnSTMT = "redirect:/user/userRequests";
+		}
+
+		return returnSTMT;
 	}
 
 }

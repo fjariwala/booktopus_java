@@ -1,5 +1,10 @@
 package com.bean.DAO;
 
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -67,8 +72,7 @@ public class Notify_DAO_Impl implements Notification_DAO {
 
 		Session session = sessionFactory.getCurrentSession();
 
-		String que = "from NotificationClass n where n.requested_by_id=" + userId
-				+ " order by n.current_status asc 	";
+		String que = "from NotificationClass n where n.requested_by_id=" + userId + " order by n.current_status desc";
 
 		Query<NotificationClass> query = session.createQuery(que, NotificationClass.class);
 		List<NotificationClass> allTheNotificationsMadeByCurrentUser = query.getResultList();
@@ -121,5 +125,89 @@ public class Notify_DAO_Impl implements Notification_DAO {
 
 		return returnStmt;
 	}
+
+	@Transactional
+	public Boolean toCancelTheNotification(int notificationId) {
+		// TODO Auto-generated method stub
+
+		Session session = sessionFactory.getCurrentSession();
+
+		NotificationClass notificationData = session.get(NotificationClass.class, notificationId);
+
+		/* Status == 1 .... means the book request has been rejected */
+		if (notificationData.getCurrent_status() == 1) {
+			/*
+			 * If the request is rejected .... And if user press cancel button then the
+			 * request from his/her requested books will be removed
+			 */
+			session.delete(notificationData);
+		}
+
+		/* Status == -1 .... means the book request has been accepted */
+		if (notificationData.getCurrent_status() == -1) {
+			/*
+			 * WHich means the book is successfully accepted and there is no need to remain
+			 * it's data into the database .... hence we delete it's data including it's
+			 * image
+			 */
+
+			int bookId = notificationData.getRequested_book_id();
+
+			BookDetails bookData = bookDao.getIndividualBook(bookId);
+
+			String imageName = bookData.getImageName();
+
+			String folder = "E:/Elcipse Resource/Booktopus/src/main/webapp/resources/uploads/";
+
+			try {
+
+				Files.deleteIfExists(Paths.get(folder + imageName));
+
+			} catch (NoSuchFileException e) {
+				System.out.println("No such file/directory exists");
+			} catch (DirectoryNotEmptyException e) {
+				System.out.println("Directory is not empty.");
+			} catch (IOException e) {
+				System.out.println("Invalid permissions.");
+			}
+
+			System.out.println("Deletion successful.");
+
+			session.delete(bookData);
+			session.delete(notificationData);
+
+			System.out.println("Book data and notification data are deleted for accepted books");
+		}
+
+		// System.out.println(notificationData.getRequested_book_name());
+
+		/* Status == 0 .... means the book request is still in pending */
+		if (notificationData.getCurrent_status() == 0) {
+			/*
+			 * Request is in the pending list
+			 */
+
+			int bookId = notificationData.getRequested_book_id();
+
+			BookDetails bookData2 = bookDao.getIndividualBook(bookId);
+
+			/*
+			 * If someone calcel the pending request then the book will be available to the
+			 * user
+			 */
+			bookData2.setAvailability(1);
+
+			session.saveOrUpdate(bookData2);
+			session.delete(notificationData);
+		}
+
+		return true;
+	}
+
+//	public NotificationClass getIndividualNotificationByItsId(int notificationId) {
+//		// TODO Auto-generated method stub
+//
+//		return null;
+//	}
 
 }

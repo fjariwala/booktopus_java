@@ -103,8 +103,9 @@
 		<div class="row">
 			<!-- 1) This is when the book data is passed, means data are not null-->
 			<!-- 2) This is when no book data is passed. Means data is empty -->
+			
+			
 			<c:choose>
-
 
 				<c:when test="${not empty books}">
 

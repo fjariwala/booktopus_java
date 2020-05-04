@@ -25,6 +25,14 @@
 	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 	crossorigin="anonymous"></script>
 
+<link
+	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet"
+	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	crossorigin="anonymous">
+<script src="https://kit.fontawesome.com/0b1d7c9201.js"
+	crossorigin="anonymous"></script>
+
 <title>Book Information</title>
 </head>
 <body>
@@ -100,25 +108,64 @@
 			<c:param name="bookId" value="${book.id }"></c:param>
 		</c:url>
 		
-		 <!-- Content here --> <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-		<div class="row">
-
-			<div class="col-md-8"><br />
-				<div class="card" style="width: 22rem;"><img
-					src="/Booktopus/resources/uploads/${book.imageName }"
-					height="450px" width="350px" class="card-img-top" alt="..."></div>
+		 <!-- Content here --> 
+		 <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+		 
+		 <!-- 
+				<div class="row">
+		
+					<div class="col-md-8"><br />
+						<div class="card" style="width: 22rem;"><img
+							src="/Booktopus/resources/uploads/${book.imageName }"
+							height="450px" width="350px" class="card-img-top" alt="..."></div>
 				</div>
-			<div class="col-md-6">
+					<div class="col-md-6">
+		
+						<h5>Name : ${book.bookName }</h5>
+						<p>Subject Code : ${book.subjectCode }</p> <a href="${ getReqLink}"
+						class="btn btn-primary">Request</a>
+		
+				</div>
+			</div>
 
-				<h5>Name : ${book.bookName }</h5>
-				<p>Subject Code : ${book.subjectCode }</p> <a href="${ getReqLink}"
-				class="btn btn-primary">Request</a>
-
+ 		-->
+ 		
+ 		<!-- New Book CSS Starts -->
+ 		<br />
+ 		<br />
+ 		 <div class="row">
+          
+                <div class="col-lg-6">
+                
+                    <img src="/Booktopus/resources/uploads/${book.imageName }" width="400px" height="500px">
+                </div>
+                <div class="col-lg-6">
+                    <h2>Book Title:${book.bookName}</h2>
+                    <br>
+                    <p>Book Author :${book.bookAuthor} </p>
+                    <p>Book Edition : ${book.bookEdition}</p>
+                    <p>Subject code : ${book.subjectCode}</p>
+                    <p>Uploaded By : ${uploaderName }</p>
+                	<p>Contact Number : ${contactNumber }</p>
+                    <div class="row">
+                       
+                        <div class="col-lg-6">
+                        
+                        <a href="${ getReqLink}">
+                            <button type="button" name="submit" class="btn btn-success btn-block bg-success"style="height:50px;"><i
+                                                class="fas fa-check"></i>Request</button>
+                        </a>
+                        
+                        </div>
+                    </div>
+                </div>
+            
+          
+            </div>
+ 		
+ 		<!-- New Book CSS Ends -->
+ 		
 		</div>
-	</div></div>
-
-
-
 	<!-- Book Component Ends -->
 
 </body>

@@ -91,7 +91,14 @@
 	<div class="container"><br /> <br /> <br />
 		<div class="alert alert-primary justify-content-center" role="alert">Here,
 			we will show the status of your requested books</div>
-		<table class="table">
+			
+			<!-- Dynamic rendering starts -->
+			
+			<c:choose>
+
+				<c:when test="${not empty notifications}">
+				
+				<table class="table">
 			<thead class="thead-dark">
 				<tr>
 					<th scope="col">Request Id</th>
@@ -101,7 +108,13 @@
 					<th scope="col">Cancel</th>
 			</tr>
 		</thead>
+		
 			<c:forEach var="notify" items="${ notifications}">
+			
+			<c:url var="cancelLink" value="/book/cancelBookData">
+				<c:param name="cancelId" value="${notify.id }"></c:param>
+			</c:url>
+			
 				<tbody>
 					<tr>
 						<th scope="row">${notify.id }</th>
@@ -126,12 +139,26 @@
 
 						</c:if>
 
-						<td><button type="button" class="btn btn-dark">Cancel</button></td>
+						<td><a href="${cancelLink }"><button type="button" class="btn btn-dark">Cancel</button></a></td>
 				</tr>
 				</tbody>
 			</c:forEach>
 
-	</table></div>
+	</table>
+				
+				</c:when>
+		
+				<c:otherwise>
+					<br />
+					<br />
+					<h5>No Notifications available..</h5>
+				</c:otherwise>
+				
+		</c:choose>
+			
+			<!-- Dynamic rendering ends -->
+			
+		</div>
 	<!-- Pending request table Ends -->
 
 </body>

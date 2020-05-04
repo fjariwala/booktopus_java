@@ -91,60 +91,76 @@
 	<div class="container"><br /> <br /> <br />
 		<div class="alert alert-primary justify-content-center" role="alert">Your
 			pending requests will be shown here</div>
-		<table class="table">
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col">Book Name</th>
-					<th scope="col">Is Requested By</th>
-					<th scope="col">Contact Detail</th>
-					<th scope="col">Accept</th>
-					<th scope="col">Reject</th>
-			</tr>
-		</thead>
+		
+		
+		<c:choose>
 
-			<c:forEach var="notify" items="${ notifications}">
+				<c:when test="${not empty notifications}">
+				
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">Book Name</th>
+							<th scope="col">Is Requested By</th>
+							<th scope="col">Contact Detail</th>
+							<th scope="col">Accept</th>
+							<th scope="col">Reject</th>
+						</tr>
+					</thead>
+				
+					<c:forEach var="notify" items="${ notifications}">
+				
+						<c:url var="getAcceptLink" value="/book/acceptBook">
+							<c:param name="notificationId" value="${notify.id }"></c:param>
+						</c:url>
+							
+						<c:url var="getRejectLink" value="/book/rejectBook">
+							<c:param name="notificationId" value="${notify.id }"></c:param>
+						</c:url>
+						
+							<tbody>
+								<tr>
+									<th scope="row">${notify.requested_book_name }</th>
+									<td>${notify.requested_by_name }</td>
+									<td>****</td>
+									
+									<c:if test="${notify.current_status==0}">
 			
-			<c:url var="getAcceptLink" value="/book/acceptBook">
-				<c:param name="notificationId" value="${notify.id }"></c:param>
-			</c:url>
+										<td><a  href="${getAcceptLink }" ><button type="button"class="btn btn-success">Accept</button></a></td>
+										<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger">Reject</button></a></td>
 			
-			<c:url var="getRejectLink" value="/book/rejectBook">
-				<c:param name="notificationId" value="${notify.id }"></c:param>
-			</c:url>
+									</c:if>
+									
+									<c:if test="${notify.current_status==-1}">
 			
-				<tbody>
-					<tr>
-						<th scope="row">${notify.requested_book_name }</th>
-						<td>${notify.requested_by_name }</td>
-						<td>****</td>
-						
-						<c:if test="${notify.current_status==0}">
+										<td><a  href="${getAcceptLink }" ><button type="button" class="btn btn-success" disabled>Accept</button></a></td>
+										<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger">Reject</button></a></td>
+			
+									</c:if>
+									
+									<c:if test="${notify.current_status==1}">
+			
+										<td><a  href="${getAcceptLink }" ><button type="button" class="btn btn-success" disabled>Accept</button></a></td>
+										<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger" disabled>Reject</button></a></td>
+			
+									</c:if>
+									
+							</tr>
+							</tbody>
+						</c:forEach>
+				</table>
+				
+				</c:when>
+		
+				<c:otherwise>
+					<br />
+					<br />
+					<h5>No Notifications available..</h5>
+				</c:otherwise>
+				
+		</c:choose>
 
-							<td><a  href="${getAcceptLink }" ><button type="button"class="btn btn-success">Accept</button></a></td>
-							<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger">Reject</button></a></td>
-
-						</c:if>
-						
-						<c:if test="${notify.current_status==-1}">
-
-							<td><a  href="${getAcceptLink }" ><button type="button" class="btn btn-success" disabled>Accept</button></a></td>
-							<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger">Reject</button></a></td>
-
-						</c:if>
-						
-						<c:if test="${notify.current_status==1}">
-
-							<td><a  href="${getAcceptLink }" ><button type="button" class="btn btn-success" disabled>Accept</button></a></td>
-							<td><a  href="${getRejectLink }" ><button type="button" class="btn btn-danger" disabled>Reject</button></a></td>
-
-						</c:if>
-						
-				</tr>
-				</tbody>
-			</c:forEach>
-
-
-	</table></div>
+</div>	
 	<!-- Pending request table Ends -->
 
 </body>

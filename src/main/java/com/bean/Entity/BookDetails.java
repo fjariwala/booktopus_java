@@ -52,10 +52,6 @@ public class BookDetails {
 	@Column(name = "uploader_id")
 	private int uploaderId;
 
-//	@NotNull(message = "is required")
-//	@Column(name = "book_data")
-//	private byte[] data;
-
 	private String imageName;
 
 	@NotNull(message = "is required")

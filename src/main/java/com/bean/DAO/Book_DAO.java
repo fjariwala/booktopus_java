@@ -14,6 +14,10 @@ public interface Book_DAO {
 	/* Book upload method */
 	public String saveBook(BookDetails bookData, MultipartFile file) throws IOException;
 
+	/* Profile */
+	/* This method will retrive all the books uploaded by the user */
+	public List<BookDetails> getAllBooksUploadedByUser(int userId);
+
 	/* Get all the books */
 	/* Here id is user's id .. which is used for showing books not owned by user */
 	public List<BookDetails> getBooks(int userId);

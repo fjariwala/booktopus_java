@@ -9,10 +9,11 @@ All the functionalities are provided in the project.
 For Running the project =>
 1) You need to create the database named booktopus
 2) Open pom.xml file and check all the dependencies are installed or not. And if you can't get it just press Ctrl+S (Save). And save the pom.xml file and it will automatically download all the dependencies.
-3) Register yourself
-4) Login and simply upload a book
-5) Now you can go to "Your Requests" to check "the status of your requested books"
-6) And you can go to "Pending Requests" to check "if someone has someone requested your book or not?"
+3) Change your file uploading path
+4) Register yourself (Note : You should create two account to see the books uplaoded by other ones)
+5) Login and simply upload a book
+6) Now you can go to "Your Requests" to check "the status of your requested books"
+7) And you can go to "Pending Requests" to check "if someone has someone requested your book or not?"
 
 Have happy coding..
 All the best..

@@ -345,4 +345,25 @@ public class Book_DAO_Impl implements Book_DAO {
 		return resultedNotifications;
 	}
 
+	@Transactional
+	public List<BookDetails> getAllBooksUploadedByUser(int userId) {
+		// TODO Auto-generated method stub
+
+		Session session = sessionFactory.getCurrentSession();
+
+		try {
+
+			String query = "from BookDetails b where b.uploaderId=" + userId + "	";
+			Query<BookDetails> que = session.createQuery(query, BookDetails.class);
+			List<BookDetails> booksUploadedByUser = que.getResultList();
+
+			return booksUploadedByUser;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.bean.DAO.Book_DAO;
 import com.bean.DAO.Notification_DAO;
 import com.bean.DAO.User_DAO;
+import com.bean.Entity.BookDetails;
 import com.bean.Entity.NotificationClass;
 import com.bean.Entity.UserDetails;
 
@@ -147,16 +148,13 @@ public class LoginANDRegister_Controller {
 			/* Getting notifications for the current user */
 			List<NotificationClass> resultNotifications = notifyDao.getNotificationForUser(userId);
 
-//			for (NotificationClass nData : resultNotifications) {
-//				System.out.println(nData.getRequested_book_name());
-//			}
-
 			model.addAttribute("notifications", resultNotifications);
 
 			return "/books/pendingReqPage";
 		} else {
 			model.addAttribute("reLogin", "Please log in again..");
-			return "/books/pendingReqPage";
+			// return "/books/pendingReqPage";
+			return "redirect:/user/login";
 		}
 	}
 
@@ -175,10 +173,6 @@ public class LoginANDRegister_Controller {
 			/* Getting all the notifications made by current user */
 			List<NotificationClass> resultedNotifications = notifyDao.getNotificationMadeByTheUser(userId);
 
-//			for (NotificationClass notificationClass : resultedNotifications) {
-//				System.out.println(notificationClass);
-//			}
-
 			model.addAttribute("notifications", resultedNotifications);
 
 			return "/books/userRequestsStatusPage";
@@ -186,9 +180,40 @@ public class LoginANDRegister_Controller {
 		} else {
 
 			model.addAttribute("reLogin", "Please log in again..");
-			// return "/books/pendingReqPage";
-
+			return "redirect:/user/login";
 		}
-		return null;
 	}
+
+	@GetMapping("/profile")
+	public String userProfile(Model model, HttpServletRequest req) {
+
+		HttpSession session = req.getSession(false);
+
+		if (session != null) {
+
+			/* Getting logged in user's data */
+			String userName = (String) session.getAttribute("name");
+			int userId = (Integer) session.getAttribute("id");
+			model.addAttribute("user", userName);
+
+			List<BookDetails> booksUploadedByUser = bookDao.getAllBooksUploadedByUser(userId);
+
+			if (booksUploadedByUser.isEmpty()) {
+
+				model.addAttribute("books", "");
+				return "/auth/profilePage";
+			}
+
+			else {
+				model.addAttribute("books", booksUploadedByUser);
+				return "/auth/profilePage";
+			}
+
+		} else {
+
+			model.addAttribute("reLogin", "Please log in again..");
+			return "redirect:/user/login";
+		}
+	}
+
 }
